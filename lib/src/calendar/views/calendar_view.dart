@@ -12461,11 +12461,11 @@ class _TimeRulerView extends CustomPainter {
     final List<String> timeFormatStrings =
         CalendarViewHelper.getListFromString(timeSlotViewSettings.timeFormat);
 
-    /// For timeline view we will draw 24 lines where as in day, week and work
-    /// week view we will draw 23 lines excluding the 12 AM, hence to rectify
-    /// this the i value handled accordingly.
+    print(timeFormatStrings);
+    print('Time interval $timeInterval');
+
     for (int i = isTimelineView ? 0 : 1;
-        i <= (isTimelineView ? horizontalLinesCount - 1 : horizontalLinesCount);
+        i <= (isTimelineView ? horizontalLinesCount : horizontalLinesCount - 1);
         i++) {
       if (isTimelineView) {
         canvas.save();
@@ -12477,10 +12477,11 @@ class _TimeRulerView extends CustomPainter {
       }
 
       final double minute = (i * timeInterval) + hour;
-      date = DateTime(date.year, date.month, date.day,
-          timeSlotViewSettings.startHour.toInt(), minute.toInt());
-      final String time = CalendarViewHelper.getLocalizedString(
-          date, timeFormatStrings, locale);
+      int hourOfDay = minute ~/ 60;
+      int minuteOfHour = minute.toInt() % 60;
+      String hourString = hourOfDay.toString().padLeft(2, '0');
+      String minuteString = minuteOfHour.toString().padLeft(2, '0');
+      final String time = '$hourString:$minuteString';
 
       final TextSpan span = TextSpan(
         text: time,
