@@ -12436,8 +12436,8 @@ class _TimeRulerView extends CustomPainter {
           timeIntervalHeight * horizontalLinesCount;
       for (int i = 0; i < visibleDates.length; i++) {
         date = visibleDates[i];
-        _drawTimeLabels(
-            canvas, size, date, hour, xPosition, yPosition, timeTextStyle);
+        _drawTimeLabels(timeSlotViewSettings, canvas, size, date, hour,
+            xPosition, yPosition, timeTextStyle);
         if (isRTL) {
           xPosition -= timelineViewWidth;
         } else {
@@ -12445,35 +12445,49 @@ class _TimeRulerView extends CustomPainter {
         }
       }
     } else {
-      _drawTimeLabels(
-          canvas, size, date, hour, xPosition, yPosition, timeTextStyle);
+      _drawTimeLabels(timeSlotViewSettings, canvas, size, date, hour, xPosition,
+          yPosition, timeTextStyle);
     }
   }
 
   /// Draws the time labels in the time label view for timeslot views in
   /// calendar.
-  void _drawTimeLabels(Canvas canvas, Size size, DateTime date, double hour,
-      double xPosition, double yPosition, TextStyle timeTextStyle) {
+  void _drawTimeLabels(
+    TimeSlotViewSettings timeSlotViewSettings,
+    Canvas canvas,
+    Size size,
+    DateTime date,
+    double hour,
+    double xPosition,
+    double yPosition,
+    TextStyle timeTextStyle,
+  ) {
     const int padding = 5;
     final int timeInterval =
         CalendarViewHelper.getTimeInterval(timeSlotViewSettings);
+    final double startTime = timeSlotViewSettings.startHour;
+    final double endTime = timeSlotViewSettings.endHour;
 
     final List<String> timeFormatStrings =
         CalendarViewHelper.getListFromString(timeSlotViewSettings.timeFormat);
 
-    for (int i = isTimelineView ? 0 : 1;
+    for (int i = 0;
         i <= (isTimelineView ? horizontalLinesCount : horizontalLinesCount - 1);
         i++) {
       if (isTimelineView) {
         canvas.save();
         canvas.clipRect(
-            Rect.fromLTWH(xPosition, 0, timeIntervalHeight, size.height));
+          Rect.fromLTWH(xPosition, 0, timeIntervalHeight, size.height),
+        );
         canvas.restore();
         canvas.drawLine(
-            Offset(xPosition, 0), Offset(xPosition, size.height), _linePainter);
+          Offset(xPosition, 0),
+          Offset(xPosition, size.height),
+          _linePainter,
+        );
       }
 
-      final double minute = (i * timeInterval) + hour;
+      final double minute = (i * timeInterval) + startTime * 60;
       int hourOfDay = minute ~/ 60;
       int minuteOfHour = minute.toInt() % 60;
       String hourString = hourOfDay.toString().padLeft(2, '0');
