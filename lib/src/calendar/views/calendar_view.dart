@@ -12466,12 +12466,8 @@ class _TimeRulerView extends CustomPainter {
     final int timeInterval =
         CalendarViewHelper.getTimeInterval(timeSlotViewSettings);
     final double startTime = timeSlotViewSettings.startHour;
-    final double endTime = timeSlotViewSettings.endHour;
 
-    final List<String> timeFormatStrings =
-        CalendarViewHelper.getListFromString(timeSlotViewSettings.timeFormat);
-
-    for (int i = 0;
+    for (int i = 1;
         i <= (isTimelineView ? horizontalLinesCount : horizontalLinesCount - 1);
         i++) {
       if (isTimelineView) {
