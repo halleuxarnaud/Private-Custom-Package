@@ -445,7 +445,7 @@ class _ResourceViewRenderObject extends CustomCalendarRenderObject {
 
         if (mouseHoverPosition != null) {
           final Color resourceHoveringColor =
-              (calendarTheme.brightness == Brightness.dark
+              (themeData.brightness == Brightness.dark
                       ? Colors.white
                       : Colors.black87)
                   .withOpacity(0.04);
@@ -476,11 +476,10 @@ class _ResourceViewRenderObject extends CustomCalendarRenderObject {
         : actualItemWidth / 2;
     final Color resourceCellBorderColor =
         cellBorderColor ?? calendarTheme.cellBorderColor!;
-    final Color resourceHoveringColor =
-        (calendarTheme.brightness == Brightness.dark
-                ? Colors.white
-                : Colors.black87)
-            .withOpacity(0.04);
+    final Color resourceHoveringColor = (themeData.brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black87)
+        .withOpacity(0.04);
     final TextStyle displayNameTextStyle = calendarTheme.displayNameTextStyle!;
     _circlePainter.color = resourceCellBorderColor;
     _circlePainter.strokeWidth = 0.5;
@@ -555,7 +554,7 @@ class _ResourceViewRenderObject extends CustomCalendarRenderObject {
     _namePainter.textDirection = TextDirection.ltr;
     _namePainter.maxLines = 1;
     _namePainter.textWidthBasis = TextWidthBasis.longestLine;
-    _namePainter.textScaleFactor = textScaleFactor;
+    _namePainter.textScaler = TextScaler.linear(textScaleFactor);
   }
 
   /// Draws the outer circle border for the resource view.

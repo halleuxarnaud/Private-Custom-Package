@@ -995,14 +995,14 @@ class _TimelineRenderObject extends CustomCalendarRenderObject {
     final TextPainter painter = TextPainter(
         textDirection: TextDirection.ltr,
         maxLines: 1,
-        textScaleFactor: textScaleFactor,
+        textScaler: TextScaler.linear(textScaleFactor),
         textAlign: isRTL ? TextAlign.right : TextAlign.left,
         textWidthBasis: TextWidthBasis.longestLine);
 
     _linePainter.style = PaintingStyle.fill;
     final int count = specialRegionBounds.length;
     final TextStyle defaultTextStyle = TextStyle(
-        color: calendarTheme.brightness == Brightness.dark
+        color: themeData.brightness == Brightness.dark
             ? Colors.white54
             : Colors.black45);
     for (int i = 0; i < count; i++) {
@@ -1302,13 +1302,13 @@ class TimelineViewHeaderView extends CustomPainter {
         dayTextStyle = dayTextStyle.copyWith(
             color: dayTextStyle.color != null
                 ? dayTextStyle.color!.withOpacity(0.38)
-                : calendarTheme.brightness == Brightness.light
+                : themeData.brightness == Brightness.light
                     ? Colors.black26
                     : Colors.white38);
         dateTextStyle = dateTextStyle.copyWith(
             color: dateTextStyle.color != null
                 ? dateTextStyle.color!.withOpacity(0.38)
-                : calendarTheme.brightness == Brightness.light
+                : themeData.brightness == Brightness.light
                     ? Colors.black26
                     : Colors.white38);
       }
@@ -1319,7 +1319,7 @@ class TimelineViewHeaderView extends CustomPainter {
       _dayTextPainter.textDirection = TextDirection.ltr;
       _dayTextPainter.textAlign = TextAlign.left;
       _dayTextPainter.textWidthBasis = TextWidthBasis.longestLine;
-      _dayTextPainter.textScaleFactor = textScaleFactor;
+      _dayTextPainter.textScaler = TextScaler.linear(textScaleFactor);
 
       final TextSpan dateTextSpan =
           TextSpan(text: dateText, style: dateTextStyle);
@@ -1328,7 +1328,7 @@ class TimelineViewHeaderView extends CustomPainter {
       _dateTextPainter.textDirection = TextDirection.ltr;
       _dateTextPainter.textAlign = TextAlign.left;
       _dateTextPainter.textWidthBasis = TextWidthBasis.longestLine;
-      _dateTextPainter.textScaleFactor = textScaleFactor;
+      _dateTextPainter.textScaler = TextScaler.linear(textScaleFactor);
 
       _dayTextPainter.layout(maxWidth: childWidth);
       _dateTextPainter.layout(maxWidth: childWidth);
@@ -1460,7 +1460,7 @@ class TimelineViewHeaderView extends CustomPainter {
     if (leftPosition + difference <= viewHeaderNotifier.value!.dx &&
         rightPosition + difference >= viewHeaderNotifier.value!.dx &&
         (size.height) - _padding >= viewHeaderNotifier.value!.dy) {
-      _hoverPainter.color = (calendarTheme.brightness == Brightness.dark
+      _hoverPainter.color = (themeData.brightness == Brightness.dark
               ? Colors.white
               : Colors.black87)
           .withOpacity(0.04);

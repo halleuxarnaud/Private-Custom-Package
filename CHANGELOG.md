@@ -1,3 +1,27 @@
+## Unreleased
+
+**Bugs**
+* \#FB57253 - Now, the appointment details are passed correctly to the [monthCellBuilder](https://pub.dev/documentation/syncfusion_flutter_calendar/latest/calendar/SfCalendar/monthCellBuilder.html) callback when navigating to the months using the navigation buttons.
+
+## [25.2.3] - 05/13/2024
+**General**
+* Upgraded the `timezone` package to the latest version 0.9.3.
+
+**Bug fixes**
+* \#FB51676 - Now, the handleLoadMore method is called once when the CalendarDataSourceAction is set to reset.
+
+## [25.1.35] - 03/15/2024
+**General**
+* Provided th​e Material 3 themes support.
+
+**Bug fixes**
+* \#FB50948 - Now, the 'setState() or markNeedsBuild() called during the build' exception will not be thrown when tapping today's button after swiping the `timelineMonth` view.
+* \#FB50846 - Now, text size remains consistent when the app state or themes gets changed.
+
+## [24.1.46] - 17/01/2024
+**General**
+* Upgraded the `intl` package to the latest version 0.19.0.
+
 ## [22.2.5]
 **Features**
 * Provided support to accessibility for builders in the Flutter event calendar.

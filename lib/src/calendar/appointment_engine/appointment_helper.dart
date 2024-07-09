@@ -158,7 +158,7 @@ class AppointmentHelper {
     /// hence to rectify this tha value 1.5 used, and tested with multiple
     /// device.
     final int iconStartPosition = (textPainter.height -
-            (icon.style!.fontSize! * textPainter.textScaleFactor)) ~/
+            (textPainter.textScaler.scale(icon.style!.fontSize!))) ~/
         1.5;
     return rect.top -
         ((textPainter.height - rect.height) / 2) -
@@ -500,6 +500,28 @@ class AppointmentHelper {
     }
 
     return getLocation(windowsTimeZoneId);
+  }
+
+  /// Method returns the date time of the provided timezone.
+  static DateTime convertTimezone(DateTime dateTime, String? targetTimezone) {
+    final DateTime convertedDate = dateTime;
+    final DateTime actualConvertedDate;
+
+    if (targetTimezone == 'Dateline Standard Time') {
+      actualConvertedDate =
+          convertedDate.toUtc().subtract(const Duration(hours: 12));
+    } else {
+      final Location location = _timeZoneInfoToOlsonTimeZone(targetTimezone!);
+      actualConvertedDate = TZDateTime.from(convertedDate, location);
+    }
+
+    return DateTime(
+        actualConvertedDate.year,
+        actualConvertedDate.month,
+        actualConvertedDate.day,
+        actualConvertedDate.hour,
+        actualConvertedDate.minute,
+        actualConvertedDate.second);
   }
 
   /// Resets the appointment views used on appointment layout rendering.

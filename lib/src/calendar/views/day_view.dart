@@ -823,13 +823,13 @@ class _TimeSlotRenderObject extends CustomCalendarRenderObject {
         textDirection: TextDirection.ltr,
         maxLines: 1,
         textAlign: isRTL ? TextAlign.right : TextAlign.left,
-        textScaleFactor: textScaleFactor,
+        textScaler: TextScaler.linear(textScaleFactor),
         textWidthBasis: TextWidthBasis.longestLine);
 
     _linePainter.style = PaintingStyle.fill;
     final int count = specialRegionBounds.length;
     final TextStyle defaultTextStyle = TextStyle(
-        color: calendarTheme.brightness == Brightness.dark
+        color: themeData.brightness == Brightness.dark
             ? Colors.white54
             : Colors.black45);
     for (int i = 0; i < count; i++) {
