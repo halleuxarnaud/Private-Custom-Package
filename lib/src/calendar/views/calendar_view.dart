@@ -5959,7 +5959,7 @@ class _CalendarViewState extends State<_CalendarView>
     if (_timelineViewVerticalScrollController != null &&
         _timelineViewVerticalScrollController!.hasClients &&
         widget.resourcePanelScrollController!.offset !=
-            _timelineViewVerticalScrollController!.offset) {
+        _timelineViewVerticalScrollController!.offset) {
       _timelineViewVerticalScrollController!
           .jumpTo(widget.resourcePanelScrollController!.offset);
     }
@@ -9826,14 +9826,14 @@ class _CalendarViewState extends State<_CalendarView>
               _updateCalendarStateDetails.allDayPanelHeight <= allDayHeight ||
               appointmentView.position + 1 >= appointmentView.maxPositions)) {
         if ((!CalendarViewHelper.isDateTimeWithInDateTimeRange(
-                    widget.calendar.minDate,
-                    widget.calendar.maxDate,
-                    appointmentView.appointment!.actualStartTime,
-                    timeInterval) ||
-                !CalendarViewHelper.isDateTimeWithInDateTimeRange(
-                    widget.calendar.minDate,
-                    widget.calendar.maxDate,
-                    appointmentView.appointment!.actualEndTime,
+                widget.calendar.minDate,
+                widget.calendar.maxDate,
+                appointmentView.appointment!.actualStartTime,
+                timeInterval) ||
+            !CalendarViewHelper.isDateTimeWithInDateTimeRange(
+                widget.calendar.minDate,
+                widget.calendar.maxDate,
+                appointmentView.appointment!.actualEndTime,
                     timeInterval)) &&
             !appointmentView.appointment!.isSpanned) {
           return null;
@@ -12472,7 +12472,7 @@ class _TimeRulerView extends CustomPainter {
     _textPainter.textDirection =
         CalendarViewHelper.getTextDirectionBasedOnLocale(locale);
     _textPainter.textWidthBasis = TextWidthBasis.longestLine;
-    _textPainter.textScaler = TextScaler.linear(textScaleFactor);
+    _textPainter.textScaleFactor = textScaleFactor;
 
     final TextStyle timeTextStyle = calendarTheme.timeTextStyle!;
 
@@ -12485,8 +12485,8 @@ class _TimeRulerView extends CustomPainter {
           timeIntervalHeight * horizontalLinesCount;
       for (int i = 0; i < visibleDates.length; i++) {
         date = visibleDates[i];
-        _drawTimeLabels(
-            canvas, size, date, hour, xPosition, yPosition, timeTextStyle);
+        _drawTimeLabels(timeSlotViewSettings, canvas, size, date, hour,
+            xPosition, yPosition, timeTextStyle);
         if (isRTL) {
           xPosition -= timelineViewWidth;
         } else {
@@ -12494,42 +12494,50 @@ class _TimeRulerView extends CustomPainter {
         }
       }
     } else {
-      _drawTimeLabels(
-          canvas, size, date, hour, xPosition, yPosition, timeTextStyle);
+      _drawTimeLabels(timeSlotViewSettings, canvas, size, date, hour, xPosition,
+          yPosition, timeTextStyle);
     }
   }
 
   /// Draws the time labels in the time label view for timeslot views in
   /// calendar.
-  void _drawTimeLabels(Canvas canvas, Size size, DateTime date, double hour,
-      double xPosition, double yPosition, TextStyle timeTextStyle) {
+  void _drawTimeLabels(
+    TimeSlotViewSettings timeSlotViewSettings,
+    Canvas canvas,
+    Size size,
+    DateTime date,
+    double hour,
+    double xPosition,
+    double yPosition,
+    TextStyle timeTextStyle,
+  ) {
     const int padding = 5;
     final int timeInterval =
         CalendarViewHelper.getTimeInterval(timeSlotViewSettings);
+    final double startTime = timeSlotViewSettings.startHour;
 
-    final List<String> timeFormatStrings =
-        CalendarViewHelper.getListFromString(timeSlotViewSettings.timeFormat);
-
-    /// For timeline view we will draw 24 lines where as in day, week and work
-    /// week view we will draw 23 lines excluding the 12 AM, hence to rectify
-    /// this the i value handled accordingly.
-    for (int i = isTimelineView ? 0 : 1;
-        i <= (isTimelineView ? horizontalLinesCount - 1 : horizontalLinesCount);
+    for (int i = 1;
+        i <= (isTimelineView ? horizontalLinesCount : horizontalLinesCount - 1);
         i++) {
       if (isTimelineView) {
         canvas.save();
         canvas.clipRect(
-            Rect.fromLTWH(xPosition, 0, timeIntervalHeight, size.height));
+          Rect.fromLTWH(xPosition, 0, timeIntervalHeight, size.height),
+        );
         canvas.restore();
         canvas.drawLine(
-            Offset(xPosition, 0), Offset(xPosition, size.height), _linePainter);
+          Offset(xPosition, 0),
+          Offset(xPosition, size.height),
+          _linePainter,
+        );
       }
 
-      final double minute = (i * timeInterval) + hour;
-      date = DateTime(date.year, date.month, date.day,
-          timeSlotViewSettings.startHour.toInt(), minute.toInt());
-      final String time = CalendarViewHelper.getLocalizedString(
-          date, timeFormatStrings, locale);
+      final double minute = (i * timeInterval) + startTime * 60;
+      int hourOfDay = minute ~/ 60;
+      int minuteOfHour = minute.toInt() % 60;
+      String hourString = hourOfDay.toString().padLeft(2, '0');
+      String minuteString = minuteOfHour.toString().padLeft(2, '0');
+      final String time = '$hourString:$minuteString';
 
       final TextSpan span = TextSpan(
         text: time,
@@ -12840,13 +12848,13 @@ class _CustomNeverScrollableScrollPhysics extends NeverScrollableScrollPhysics {
 
 class _CurrentTimeIndicator extends CustomPainter {
   _CurrentTimeIndicator(
-    this.timeIntervalSize,
-    this.timeRulerSize,
-    this.timeSlotViewSettings,
-    this.isTimelineView,
-    this.visibleDates,
-    this.todayHighlightColor,
-    this.isRTL,
+      this.timeIntervalSize,
+      this.timeRulerSize,
+      this.timeSlotViewSettings,
+      this.isTimelineView,
+      this.visibleDates,
+      this.todayHighlightColor,
+      this.isRTL,
     ValueNotifier<int> repaintNotifier,
     this.timeZone,
   ) : super(repaint: repaintNotifier);
