@@ -1331,9 +1331,9 @@ class ScheduleViewHoveringDetails {
 /// if all day panel appointment selected then [appointmentView] holds
 /// appointment details, else [selectedDate] holds selected region date value.
 @immutable
-class SelectionDetails {
+class SelectionDetailsV2 {
   /// Constructor to create the selection details.
-  const SelectionDetails(this.appointmentView, this.selectedDate);
+  const SelectionDetailsV2(this.appointmentView, this.selectedDate);
 
   /// Holds the selected appointment view details.
   final AppointmentView? appointmentView;

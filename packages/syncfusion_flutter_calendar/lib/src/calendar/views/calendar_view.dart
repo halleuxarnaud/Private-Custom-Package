@@ -5634,8 +5634,8 @@ class _CalendarViewState extends State<_CalendarView>
   late double _timeIntervalHeight;
   final UpdateCalendarStateDetails _updateCalendarStateDetails =
       UpdateCalendarStateDetails();
-  ValueNotifier<SelectionDetails?> _allDaySelectionNotifier =
-      ValueNotifier<SelectionDetails?>(null);
+  ValueNotifier<SelectionDetailsV2?> _allDaySelectionNotifier =
+      ValueNotifier<SelectionDetailsV2?>(null);
   late ValueNotifier<Offset?> _viewHeaderNotifier;
   final ValueNotifier<Offset?> _calendarCellNotifier =
           ValueNotifier<Offset?>(null),
@@ -5803,7 +5803,7 @@ class _CalendarViewState extends State<_CalendarView>
     /// select the same month cell and move to day view then the view show
     /// calendar cell selection and all day panel selection.
     if (oldWidget.view != widget.view) {
-      _allDaySelectionNotifier = ValueNotifier<SelectionDetails?>(null);
+      _allDaySelectionNotifier = ValueNotifier<SelectionDetailsV2?>(null);
       final DateTime today = DateTime.now();
       _currentTimeNotifier = ValueNotifier<int>(
           (today.day * 24 * 60) + (today.hour * 60) + today.minute);
@@ -5959,7 +5959,7 @@ class _CalendarViewState extends State<_CalendarView>
     if (_timelineViewVerticalScrollController != null &&
         _timelineViewVerticalScrollController!.hasClients &&
         widget.resourcePanelScrollController!.offset !=
-        _timelineViewVerticalScrollController!.offset) {
+            _timelineViewVerticalScrollController!.offset) {
       _timelineViewVerticalScrollController!
           .jumpTo(widget.resourcePanelScrollController!.offset);
     }
@@ -9395,7 +9395,7 @@ class _CalendarViewState extends State<_CalendarView>
       return;
     }
 
-    _allDaySelectionNotifier.value = SelectionDetails(view, date);
+    _allDaySelectionNotifier.value = SelectionDetailsV2(view, date);
   }
 
   //// Handles the onTap callback for day view cells, all day panel, and view
@@ -9826,14 +9826,14 @@ class _CalendarViewState extends State<_CalendarView>
               _updateCalendarStateDetails.allDayPanelHeight <= allDayHeight ||
               appointmentView.position + 1 >= appointmentView.maxPositions)) {
         if ((!CalendarViewHelper.isDateTimeWithInDateTimeRange(
-                widget.calendar.minDate,
-                widget.calendar.maxDate,
-                appointmentView.appointment!.actualStartTime,
-                timeInterval) ||
-            !CalendarViewHelper.isDateTimeWithInDateTimeRange(
-                widget.calendar.minDate,
-                widget.calendar.maxDate,
-                appointmentView.appointment!.actualEndTime,
+                    widget.calendar.minDate,
+                    widget.calendar.maxDate,
+                    appointmentView.appointment!.actualStartTime,
+                    timeInterval) ||
+                !CalendarViewHelper.isDateTimeWithInDateTimeRange(
+                    widget.calendar.minDate,
+                    widget.calendar.maxDate,
+                    appointmentView.appointment!.actualEndTime,
                     timeInterval)) &&
             !appointmentView.appointment!.isSpanned) {
           return null;
@@ -12848,13 +12848,13 @@ class _CustomNeverScrollableScrollPhysics extends NeverScrollableScrollPhysics {
 
 class _CurrentTimeIndicator extends CustomPainter {
   _CurrentTimeIndicator(
-      this.timeIntervalSize,
-      this.timeRulerSize,
-      this.timeSlotViewSettings,
-      this.isTimelineView,
-      this.visibleDates,
-      this.todayHighlightColor,
-      this.isRTL,
+    this.timeIntervalSize,
+    this.timeRulerSize,
+    this.timeSlotViewSettings,
+    this.isTimelineView,
+    this.visibleDates,
+    this.todayHighlightColor,
+    this.isRTL,
     ValueNotifier<int> repaintNotifier,
     this.timeZone,
   ) : super(repaint: repaintNotifier);
